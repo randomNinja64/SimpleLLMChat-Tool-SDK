@@ -1,2 +1,2 @@
-# SimpleLLMChat-Tool-SDK
-Example code and information about developing tools for SimpleLLMChat
+# SimpleLLMChat Tool SDK
+This repository hosts an example SimpleLLMChat tool implementation written in C# targeting .NET Framework 4.0, as well as information about tool development. This should serve as a starting point for anyone wishing to develop their own tools for [SimpleLLMChat](https://github.com/randomNinja64/SimpleLLMChat)
