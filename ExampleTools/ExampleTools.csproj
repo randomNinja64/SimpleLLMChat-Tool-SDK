@@ -45,9 +45,6 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="ExampleHandler.cs" />
-    <Compile Include="..\ToolHelper.cs">
-      <Link>ToolHelper.cs</Link>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,16 +1,106 @@
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Text;
 
 namespace ExampleTools
 {
     internal class Program
     {
+        static Dictionary<string, string> Config
+            = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+        static void LoadManifestDefaults()
+        {
+            try
+            {
+                string manifestPath = Path.ChangeExtension(
+                    Assembly.GetEntryAssembly().Location, ".json");
+                if (!File.Exists(manifestPath)) return;
+                JObject manifest = JObject.Parse(File.ReadAllText(manifestPath));
+                foreach (JToken opt in manifest["options"] ?? new JArray())
+                {
+                    string name = opt["name"]?.ToString();
+                    string def  = opt["default"]?.ToString();
+                    if (!string.IsNullOrEmpty(name) && def != null)
+                        Config[name] = def;
+                }
+            }
+            catch { }
+        }
+
+        static string GetConfigString(string key)
+        {
+            string value;
+            if (Config.TryGetValue(key, out value))
+                return value;
+            return "";
+        }
+
+        static int GetConfigInt(string key, int defaultValue)
+        {
+            string value;
+            if (Config.TryGetValue(key, out value))
+            {
+                int result;
+                if (int.TryParse(value, out result))
+                    return result;
+            }
+            return defaultValue;
+        }
+
+        static string GetRequiredArg(string arguments, string argName)
+        {
+            string value = JsonExtractString(arguments, argName)?.Trim() ?? "";
+            if (string.IsNullOrEmpty(value))
+                throw new ArgumentException("missing '" + argName + "' argument.");
+            return value;
+        }
+
+        static string JsonExtractString(string json, string key)
+        {
+            if (string.IsNullOrEmpty(json) || string.IsNullOrEmpty(key))
+                return "";
+
+            try
+            {
+                string trimmedJson = json.Trim();
+                if (trimmedJson.Length == 0)
+                    return "";
+
+                JToken root = JToken.Parse(trimmedJson);
+                if (root.Type == JTokenType.Object)
+                {
+                    JObject obj = (JObject)root;
+                    JToken token;
+                    if (!obj.TryGetValue(key, out token))
+                    {
+                        foreach (JProperty property in obj.Properties())
+                        {
+                            if (string.Equals(property.Name, key, StringComparison.OrdinalIgnoreCase))
+                            {
+                                token = property.Value;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (token != null && token.Type != JTokenType.Null)
+                        return token.Type == JTokenType.String ? token.Value<string>() ?? "" : token.ToString();
+                }
+            }
+            catch { }
+
+            return "";
+        }
+
         static int Main(string[] args)
         {
             Console.InputEncoding = Encoding.UTF8;
             Console.OutputEncoding = Encoding.UTF8;
-            ToolHelper.LoadManifestDefaults();
+            LoadManifestDefaults();
 
             if (args.Length < 1)
             {
@@ -36,7 +126,7 @@ namespace ExampleTools
                     {
                         foreach (JProperty prop in configObj.Properties())
                         {
-                            ToolHelper.Config[prop.Name] = prop.Value.ToString();
+                            Config[prop.Name] = prop.Value.ToString();
                         }
                     }
 
@@ -67,11 +157,11 @@ namespace ExampleTools
 
                     case "example_tool_with_params":
                         {
-                            string requiredParam = ToolHelper.GetRequiredArg(argumentsJson, "required_param");
-                            string optionalParam = ToolHelper.JsonExtractString(argumentsJson, "optional_param") ?? "";
-                            string configString = ToolHelper.GetConfigString("exampleString");
-                            int    configInt    = ToolHelper.GetConfigInt("exampleInt", 42);
-                            bool   configBool   = ToolHelper.GetConfigInt("exampleBool", 0) == 1;
+                            string requiredParam = GetRequiredArg(argumentsJson, "required_param");
+                            string optionalParam = JsonExtractString(argumentsJson, "optional_param") ?? "";
+                            string configString  = GetConfigString("exampleString");
+                            int    configInt     = GetConfigInt("exampleInt", 42);
+                            bool   configBool    = GetConfigInt("exampleBool", 0) == 1;
                             output = ExampleHandler.ExampleToolWithParams(requiredParam, optionalParam, configString, configInt, configBool, out exitCode);
                             break;
                         }

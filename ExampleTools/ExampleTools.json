@@ -2,9 +2,24 @@
     "name": "Example Tools",
     "executable": "ExampleTools.exe",
     "options": [
-        { "name": "exampleString", "label": "An example string config option", "type": "string", "default": "default_value" },
-        { "name": "exampleInt",    "label": "An example integer config option", "type": "int",    "default": "42" },
-        { "name": "exampleBool",   "label": "An example boolean config option", "type": "int",    "default": "0" }
+        {
+            "name": "exampleString",
+            "label": "An example string config option",
+            "type": "string",
+            "default": "default_value"
+        },
+        {
+            "name": "exampleInt",
+            "label": "An example integer config option",
+            "type": "int",
+            "default": "42"
+        },
+        {
+            "name": "exampleBool",
+            "label": "An example boolean config option",
+            "type": "bool",
+            "default": "0"
+        }
     ],
     "tools": [
         {
@@ -16,8 +31,18 @@
             "name": "example_tool_with_params",
             "description": "An example tool that takes a required parameter, an optional parameter, and reads a config value.",
             "parameters": [
-                { "name": "required_param", "type": "string", "description": "A required parameter.", "required": true },
-                { "name": "optional_param", "type": "string", "description": "An optional parameter.", "required": false }
+                {
+                    "name": "required_param",
+                    "type": "string",
+                    "description": "A required parameter.",
+                    "required": true
+                },
+                {
+                    "name": "optional_param",
+                    "type": "string",
+                    "description": "An optional parameter.",
+                    "required": false
+                }
             ]
         }
     ]
