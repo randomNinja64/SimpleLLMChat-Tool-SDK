@@ -39,3 +39,12 @@ Exit Code: <exit_code>
 Output:
 <tool_output>
 ```
+
+# Building the Example
+
+To build the example, the .NET 4 Targeting Pack is required.
+
+The example can be built in either of the following ways:
+
+  - Open the solution in Visual Studio, choose Release for configuration, and build the solution
+  - Run the command `dotnet msbuild SimpleLLMChat-Tool-SDK.sln /p:Configuration=Release` (requires the .NET SDK)
