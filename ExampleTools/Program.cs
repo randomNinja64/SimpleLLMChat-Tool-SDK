@@ -166,6 +166,16 @@ namespace ExampleTools
                             break;
                         }
 
+                    case "get_example_context":
+                        {
+                            string configString = GetConfigString("exampleString");
+                            int configInt = GetConfigInt("exampleInt", 42);
+                            bool configBool = GetConfigInt("exampleBool", 0) == 1;
+                            output = ExampleHandler.GetContext(configString, configInt, configBool);
+                            exitCode = 0;
+                            break;
+                        }
+
                     default:
                         output = "error: unknown tool '" + toolName + "'.";
                         exitCode = 1;

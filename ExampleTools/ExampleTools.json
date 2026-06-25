@@ -1,6 +1,7 @@
 {
     "name": "Example Tools",
     "executable": "ExampleTools.exe",
+    "context_injector": "get_example_context",
     "options": [
         {
             "name": "exampleString",

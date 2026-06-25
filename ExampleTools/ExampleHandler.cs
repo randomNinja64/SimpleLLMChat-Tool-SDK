@@ -35,5 +35,12 @@ namespace ExampleTools
                 return "Error: " + ex.Message;
             }
         }
+
+        public static string GetContext(string configString, int configInt, bool configBool)
+        {
+            return "Example Tools context: exampleString=" + configString
+                + ", exampleInt=" + configInt
+                + ", exampleBool=" + (configBool ? "true" : "false");
+        }
     }
 }

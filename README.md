@@ -8,6 +8,7 @@ SimpleLLMChat tools are packaged as an executable and an associated JSON file of
 
 - `name` - Display name for the tool package, shown as a heading in the SimpleLLMChat options window (e.g. "Example Tools")
 - `executable` - Filename of the executable (e.g. "ExampleTools.exe")
+- `context_injector` - (optional) Command name passed to the executable when generating text to be added to the system prompt as context (e.g. `"get_example_context"`)
 - `options` - Array of options to be configured by the user within the SimpleLLMChat UI; each object in the array contains the following fields
   - `name` - Key used to read the option's value in code (e.g. `"exampleOption"`)
   - `label` - Name of the option within the UI (e.g. `"Example Option"`)
@@ -39,6 +40,12 @@ Exit Code: <exit_code>
 Output:
 <tool_output>
 ```
+
+## Context Injectors
+
+Tool packages can inject additional information into the system prompt via context injectors. SimpleLLMChat calls a context injector by running `<executable_name> <context_injector>`, using the same stdin protocol as a normal tool call (`config` and an empty `arguments` object). The text written to stdout is appended to the system prompt before each LLM request, but only when at least one tool from that package is enabled.
+
+This can be used, for example, to add memory information as context to the system prompt.
 
 ## Building the Example
 
