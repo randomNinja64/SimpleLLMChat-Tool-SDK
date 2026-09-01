@@ -96,6 +96,39 @@ namespace ExampleTools
             return "";
         }
 
+        static JArray JsonExtractArray(string json, string key)
+        {
+            if (string.IsNullOrEmpty(json) || string.IsNullOrEmpty(key))
+                return null;
+
+            try
+            {
+                JToken root = JToken.Parse(json.Trim());
+                if (root.Type != JTokenType.Object)
+                    return null;
+
+                JObject obj = (JObject)root;
+                JToken token;
+                if (!obj.TryGetValue(key, out token))
+                {
+                    foreach (JProperty property in obj.Properties())
+                    {
+                        if (string.Equals(property.Name, key, StringComparison.OrdinalIgnoreCase))
+                        {
+                            token = property.Value;
+                            break;
+                        }
+                    }
+                }
+
+                return token as JArray;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         static int Main(string[] args)
         {
             Console.InputEncoding = Encoding.UTF8;
@@ -163,6 +196,13 @@ namespace ExampleTools
                             int    configInt     = GetConfigInt("exampleInt", 42);
                             bool   configBool    = GetConfigInt("exampleBool", 0) == 1;
                             output = ExampleHandler.ExampleToolWithParams(requiredParam, optionalParam, configString, configInt, configBool, out exitCode);
+                            break;
+                        }
+
+                    case "example_tool_with_array_param":
+                        {
+                            JArray items = JsonExtractArray(argumentsJson, "items");
+                            output = ExampleHandler.ExampleToolWithArrayParam(items, out exitCode);
                             break;
                         }
 

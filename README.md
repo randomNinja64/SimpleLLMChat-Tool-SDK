@@ -19,9 +19,10 @@ SimpleLLMChat tools are packaged as an executable and an associated JSON file of
   - `description` - Description passed to the LLM so that the AI knows when/how to use the tool (e.g. `"A tool that adds two numbers together"`)
   - `parameters` - Array containing parameter objects (can be empty if no parameters are required), each object in the array contains the following fields
     - `name` - Key passed to the LLM so that it knows what to name the parameter; extracted from arguments JSON by the executable (e.g. `"search_query"`)
-    - `type` - JSON Schema type passed to the LLM (e.g. `"string"`, `"number"`, etc.; if omitted, the default is `"string"`)
+    - `type` - JSON Schema type passed to the LLM (e.g. `"string"`, `"number"`, `"array"`, etc.; if omitted, the default is `"string"`)
     - `description` - Passed to the LLM so that it knows what value to provide for this argument (e.g. `"The query to search for"`)
     - `required` - Boolean that tells the LLM whether the parameter is required when calling the tool
+    - `items` - (optional) JSON Schema `items` object for array parameters; passed through to the LLM (e.g. `"type": "object"` with `properties`)
 
 ## Invocation Protocol
 

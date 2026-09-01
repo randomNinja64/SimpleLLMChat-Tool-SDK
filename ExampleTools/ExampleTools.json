@@ -45,6 +45,26 @@
                     "required": false
                 }
             ]
+        },
+        {
+            "name": "example_tool_with_array_param",
+            "description": "An example tool that accepts an array parameter.",
+            "parameters": [
+                {
+                    "name": "items",
+                    "type": "array",
+                    "description": "One or more labeled items.",
+                    "required": true,
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "label": { "type": "string", "description": "Item label." },
+                            "value": { "type": "string", "description": "Item value." }
+                        },
+                        "required": ["label", "value"]
+                    }
+                }
+            ]
         }
     ]
 }
