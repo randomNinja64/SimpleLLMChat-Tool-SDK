@@ -65,6 +65,11 @@
                     }
                 }
             ]
+        },
+        {
+            "name": "example_tool_with_image",
+            "description": "Demonstrates returning an image via the JSON result envelope (1x1 PNG).",
+            "parameters": []
         }
     ]
 }

@@ -70,6 +70,15 @@ namespace ExampleTools
             }
         }
 
+        public static string ExampleToolWithImage(out string imageBase64, out string imageMime, out int exitCode)
+        {
+            exitCode = 0;
+            imageMime = "image/png";
+            // 1x1 opaque red PNG
+            imageBase64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
+            return "example 1x1 PNG @0,0 1x1";
+        }
+
         public static string GetContext(string configString, int configInt, bool configBool)
         {
             return "Example Tools context: exampleString=" + configString

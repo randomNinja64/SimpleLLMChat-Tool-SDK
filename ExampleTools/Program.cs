@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -179,6 +180,8 @@ namespace ExampleTools
 
             int exitCode = 0;
             string output = "";
+            string imageBase64 = null;
+            string imageMime = null;
 
             try
             {
@@ -203,6 +206,12 @@ namespace ExampleTools
                         {
                             JArray items = JsonExtractArray(argumentsJson, "items");
                             output = ExampleHandler.ExampleToolWithArrayParam(items, out exitCode);
+                            break;
+                        }
+
+                    case "example_tool_with_image":
+                        {
+                            output = ExampleHandler.ExampleToolWithImage(out imageBase64, out imageMime, out exitCode);
                             break;
                         }
 
@@ -231,8 +240,24 @@ namespace ExampleTools
                 exitCode = 1;
             }
 
-            Console.Write(output);
+            Console.Write(FormatResultJson(output, imageBase64, imageMime));
             return exitCode;
+        }
+
+        static string FormatResultJson(string text, string imageBase64, string imageMime)
+        {
+            var obj = new JObject();
+            obj["text"] = text ?? "";
+            if (!string.IsNullOrEmpty(imageBase64))
+            {
+                string mime = string.IsNullOrEmpty(imageMime) ? "image/png" : imageMime;
+                obj["image"] = new JObject
+                {
+                    ["mime"] = mime,
+                    ["data"] = imageBase64
+                };
+            }
+            return obj.ToString(Formatting.None);
         }
     }
 }
